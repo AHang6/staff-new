@@ -34,4 +34,10 @@ urlpatterns = [
     path('user/<int:nid>/delete/', views.user_delete),
     path('user/<int:nid>/edit/', views.user_edit),
 
+    # 靓号管理
+    path('mobile/list/', views.mobile_list),
+    path('mobile/add/', views.mobile_add),
+    path('mobile/<int:nid>/delete/', views.mobile_delete),
+    path('mobile/<int:nid>/edit/', views.mobile_edit),
+
 ]

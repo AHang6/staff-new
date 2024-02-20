@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+	<div class="container">
+		<div>
+			<a href="/mobile/add/" class="btn btn-primary" style="margin-bottom: 20px">添加靓号</a>
+
+			<div style="float: right; width: 300px">
+				<form action="">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search for..." name="q" value="{{ search_info }}">
+						<span class="input-group-btn">
+       					<button class="btn btn-default" type="submit">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</button>
+     				 </span>
+					</div><!-- /input-group -->
+				</form>
+			</div>
+		</div>
+
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>靓号号码</th>
+					<th>价格</th>
+					<th>级别</th>
+					<th>状态</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in mobile_data %}
+					<tr>
+						<th scope="row">{{ item.id }}</th>
+						<td>{{ item.mobile }}</td>
+						<td>{{ item.price }}</td>
+						<td>{{ item.get_level_display }}</td>
+						<td>{{ item.get_status_display }}</td>
+						<td>
+							<a href="/mobile/{{ item.id }}/edit/" class="btn btn-primary btn-xs">编 辑</a>
+							<a href="/mobile/{{ item.id }}/delete/" class="btn btn-danger btn-xs">删 除</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
