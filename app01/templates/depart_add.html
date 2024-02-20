@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">添加部门</div>
+			<div class="panel-body">
+				<form class="form-horizontal" action="/depart/add/" method="post">
+					{% csrf_token %}
+					<div class="form-group">
+						<label class="col-sm-1 control-label">部门名称:</label>
+						<div class="col-sm-11">
+							<input type="text" class="form-control" placeholder="请输入部门名称" name="title">
+						</div>
+						<div class="col-sm-offset-1">
+							<span style="color: red; padding-left: 15px">{{ error_msg }}</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-1 col-sm-11">
+							<button type="submit" class="btn btn-primary">提 交</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
