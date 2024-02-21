@@ -2,6 +2,7 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 
+from app01.utils.pagination import Pagination
 from app01.models import Depart, UserInfo, MobileNum
 
 
@@ -10,7 +11,14 @@ from app01.models import Depart, UserInfo, MobileNum
 def depart_list(request):
     depart_data = Depart.objects.all()
 
-    return render(request, 'depart_list.html', {'depart_data': depart_data})
+    page_obj = Pagination(request, depart_data)
+    
+    context = {
+        'depart_data': page_obj.page_queryset,
+        'page_string': page_obj.html()
+    }
+
+    return render(request, 'depart_list.html', context)
 
 
 def depart_add(request):
@@ -44,13 +52,22 @@ def depart_edit(request, nid):
 
 def user_list(request):
     user_data = UserInfo.objects.all()
-    return render(request, "user_list.html", {'user_data': user_data})
+
+    page_obj = Pagination(request, user_data)
+    context = {
+        'user_data': page_obj.page_queryset,
+        'page_string': page_obj.html(),
+    }
+    return render(request, "user_list.html", context)
 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = UserInfo
         fields = "__all__"
+        widgets = {
+            'password': forms.PasswordInput(attrs={'class': 'form-control'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -126,73 +143,16 @@ def mobile_list(request):
     if search_info:
         data_dict['mobile__contains'] = search_info
 
-    # 分页
-    if request.GET.get('page', 1):
-        page = int(request.GET.get('page'))
+    queryset = MobileNum.objects.filter(**data_dict).order_by('-level')
+    page_obj = Pagination(request, queryset)
 
-    page_size = 10
-    start = (page - 1) * page_size
-    end = page * page_size
+    context = {
+        'search_info': search_info,
+        'mobile_data': page_obj.page_queryset,
+        'page_string': page_obj.html(),
+    }
 
-    mobile_date_count = MobileNum.objects.filter(**data_dict).order_by('-level').count()
-    mobile_data = MobileNum.objects.filter(**data_dict).order_by('-level')[start: end]
-    page_count, div = divmod(mobile_date_count, page_size)
-    if div > 0:
-        page_count += 1
-
-    # 计算页码显示范围
-    plus = 5
-    if page_count <= 2 * plus + 1:
-        # 当数据库数据较少时，小于11条数据
-        start_page = 1
-        end_page = page_count
-    else:
-        # 数据库数据较多时 大于11
-        # 当前页 < 5
-        if page <= plus:
-            start_page = 1
-            end_page = 2 * plus + 1
-        else:
-            # 当前页 > 5
-            # 当前页+5 > 总页面
-            if page + plus > page_count:
-                start_page = page_count - 2 * plus
-                end_page = page_count
-            else:
-                start_page = page - plus
-                end_page = page + plus
-
-    # 生成页码html
-    page_str_list = []
-
-    pre_page = page - 1
-    if pre_page > 0:
-        ele = '<li><a href="?page={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(
-            page - 1)
-    else:
-        ele = '<li><a href="?page={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(1)
-    page_str_list.append(ele)
-
-    for i in range(start_page, end_page + 1):
-        if i == page:
-            ele = '<li class="active"><a href="?page={}">{}</a></li>'.format(i, i)
-        else:
-            ele = '<li><a href="?page={}">{}</a></li>'.format(i, i)
-        page_str_list.append(ele)
-
-    next_page = page + 1
-    if next_page < page_count:
-        ele = '<li><a href="?page={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(
-            page + 1)
-    else:
-        ele = '<li><a href="?page={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(
-            page_count)
-
-    page_str_list.append(ele)
-    page_string = mark_safe("".join(page_str_list))
-
-    return render(request, "mobile_list.html",
-                  {'mobile_data': mobile_data, "search_info": search_info, "page_string": page_string})
+    return render(request, "mobile_list.html",context)
 
 
 def mobile_add(request):
