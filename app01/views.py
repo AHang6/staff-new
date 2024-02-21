@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, redirect
+from django.utils.safestring import mark_safe
 
 from app01.models import Depart, UserInfo, MobileNum
 
@@ -120,13 +121,78 @@ class MobileForm(forms.ModelForm):
 
 def mobile_list(request):
     data_dict = {}
-    search_info = request.GET.get('q')
+    search_info = request.GET.get('q', "")
 
     if search_info:
         data_dict['mobile__contains'] = search_info
 
-    mobile_data = MobileNum.objects.filter(**data_dict).order_by('-level')
-    return render(request, "mobile_list.html", {'mobile_data': mobile_data, "search_info": search_info})
+    # 分页
+    if request.GET.get('page', 1):
+        page = int(request.GET.get('page'))
+
+    page_size = 10
+    start = (page - 1) * page_size
+    end = page * page_size
+
+    mobile_date_count = MobileNum.objects.filter(**data_dict).order_by('-level').count()
+    mobile_data = MobileNum.objects.filter(**data_dict).order_by('-level')[start: end]
+    page_count, div = divmod(mobile_date_count, page_size)
+    if div > 0:
+        page_count += 1
+
+    # 计算页码显示范围
+    plus = 5
+    if page_count <= 2 * plus + 1:
+        # 当数据库数据较少时，小于11条数据
+        start_page = 1
+        end_page = page_count
+    else:
+        # 数据库数据较多时 大于11
+        # 当前页 < 5
+        if page <= plus:
+            start_page = 1
+            end_page = 2 * plus + 1
+        else:
+            # 当前页 > 5
+            # 当前页+5 > 总页面
+            if page + plus > page_count:
+                start_page = page_count - 2 * plus
+                end_page = page_count
+            else:
+                start_page = page - plus
+                end_page = page + plus
+
+    # 生成页码html
+    page_str_list = []
+
+    pre_page = page - 1
+    if pre_page > 0:
+        ele = '<li><a href="?page={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(
+            page - 1)
+    else:
+        ele = '<li><a href="?page={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(1)
+    page_str_list.append(ele)
+
+    for i in range(start_page, end_page + 1):
+        if i == page:
+            ele = '<li class="active"><a href="?page={}">{}</a></li>'.format(i, i)
+        else:
+            ele = '<li><a href="?page={}">{}</a></li>'.format(i, i)
+        page_str_list.append(ele)
+
+    next_page = page + 1
+    if next_page < page_count:
+        ele = '<li><a href="?page={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(
+            page + 1)
+    else:
+        ele = '<li><a href="?page={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(
+            page_count)
+
+    page_str_list.append(ele)
+    page_string = mark_safe("".join(page_str_list))
+
+    return render(request, "mobile_list.html",
+                  {'mobile_data': mobile_data, "search_info": search_info, "page_string": page_string})
 
 
 def mobile_add(request):
