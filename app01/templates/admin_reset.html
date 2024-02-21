@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">重置密码</div>
+			<div class="panel-body">
+				<form action="" method="post" novalidate>
+					{% csrf_token %}
+					{% for field in form %}
+						<div class="form-group">
+							<label for="">{{ field.label }}</label>
+							{{ field }}
+							<span style="color: red;">{{ field.errors.0 }}</span>
+						</div>
+					{% endfor %}
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary center-block">提 交</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

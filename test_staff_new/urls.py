@@ -40,4 +40,11 @@ urlpatterns = [
     path('mobile/<int:nid>/delete/', views.mobile_delete),
     path('mobile/<int:nid>/edit/', views.mobile_edit),
 
+    # 管理员管理
+    path('admin/list/', views.admin_list),
+    path('admin/add/', views.admin_add),
+    path('admin/<int:nid>/delete/', views.admin_delete),
+    path('admin/<int:nid>/edit/', views.admin_edit),
+    path('admin/<int:nid>/reset/', views.admin_reset),
+
 ]

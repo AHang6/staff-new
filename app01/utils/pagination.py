@@ -107,7 +107,6 @@ class Pagination(object):
                 self.query_dict.setlist(self.page_parm, [i])
                 ele = '<li><a href="?{}">{}</a></li>'.format(self.query_dict.urlencode(), i)
                 page_list.append(ele)
-        print(start_page, end_page)
 
         # 下一页
         if self.page < self.page_count:

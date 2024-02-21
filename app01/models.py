@@ -4,6 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Depart(models.Model):
+    """   部门表   """
     title = models.CharField(max_length=32)
 
     def __str__(self):
@@ -11,6 +12,7 @@ class Depart(models.Model):
 
 
 class UserInfo(models.Model):
+    """   用户表   """
     name = models.CharField(verbose_name="姓名", max_length=32)
     password = models.CharField(verbose_name="密码", max_length=32)
     age = models.IntegerField(verbose_name="年龄")
@@ -26,6 +28,7 @@ class UserInfo(models.Model):
 
 
 class MobileNum(models.Model):
+    """   靓号表  """
     mobile = models.CharField(verbose_name="手机号", max_length=32)
     price = models.DecimalField(verbose_name="价格", max_digits=10, decimal_places=2)
 
@@ -43,3 +46,13 @@ class MobileNum(models.Model):
         (2, "未占用"),
     )
     status = models.SmallIntegerField(verbose_name="状态", choices=status_choices)
+
+
+class Admin(models.Model):
+    """   管理员   """
+    username = models.CharField(verbose_name="用户名", max_length=32)
+    password = models.CharField(verbose_name="密码", max_length=32)
+
+
+
+
