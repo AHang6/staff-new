@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from app01 import views
-from app01.views import depart
+from app01.views import depart, user, mobile, admin, login
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -30,28 +30,28 @@ urlpatterns = [
     path('depart/<int:nid>/edit/', depart.depart_edit),
 
     # 用户管理
-    path('user/list/', views.user_list),
-    path('user/add/', views.user_add),
-    path('user/<int:nid>/delete/', views.user_delete),
-    path('user/<int:nid>/edit/', views.user_edit),
+    path('user/list/', user.user_list),
+    path('user/add/', user.user_add),
+    path('user/<int:nid>/delete/', user.user_delete),
+    path('user/<int:nid>/edit/', user.user_edit),
 
     # 靓号管理
-    path('mobile/list/', views.mobile_list),
-    path('mobile/add/', views.mobile_add),
-    path('mobile/<int:nid>/delete/', views.mobile_delete),
-    path('mobile/<int:nid>/edit/', views.mobile_edit),
+    path('mobile/list/', mobile.mobile_list),
+    path('mobile/add/', mobile.mobile_add),
+    path('mobile/<int:nid>/delete/', mobile.mobile_delete),
+    path('mobile/<int:nid>/edit/', mobile.mobile_edit),
 
     # 管理员管理
-    path('admin/list/', views.admin_list),
-    path('admin/add/', views.admin_add),
-    path('admin/<int:nid>/delete/', views.admin_delete),
-    path('admin/<int:nid>/edit/', views.admin_edit),
-    path('admin/<int:nid>/reset/', views.admin_reset),
+    path('admin/list/', admin.admin_list),
+    path('admin/add/', admin.admin_add),
+    path('admin/<int:nid>/delete/', admin.admin_delete),
+    path('admin/<int:nid>/edit/', admin.admin_edit),
+    path('admin/<int:nid>/reset/', admin.admin_reset),
 
     # 用户登录
-    path('login/', views.login),
-    path('logout/', views.logout),
-    path('image/code/', views.image_code),
+    path('login/', login.login),
+    path('logout/', login.logout),
+    path('image/code/', login.image_code),
 
 
 ]

@@ -4,7 +4,12 @@
 	<div class="container">
 		<a href="/user/add/" class="btn btn-primary" style="margin-bottom: 20px">添加用户</a>
 
-		<table class="table table-bordered">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right: 5px"></span>
+				用户列表
+			</div>
+			<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -37,6 +42,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		</div>
+
+
 
 
 		<ul class="pagination center">
