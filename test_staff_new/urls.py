@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from app01 import views
-from app01.views import depart, user, mobile, admin, login
+from app01.views import depart, user, mobile, admin, login, task, older
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -53,5 +53,16 @@ urlpatterns = [
     path('logout/', login.logout),
     path('image/code/', login.image_code),
 
+    # 任务管理
+    path('task/list/', task.task_list),
+    path('task/test/', task.task_test),
+    path('task/delete/', task.task_delete),
+
+    # 订单管理
+    path('older/list/', older.older_list),
+    path('older/add/', older.older_add),
+    path('older/delete/', older.older_delete),
+    path('older/edit/', older.older_edit),
+    path('older/edit/save/', older.older_edit_save),
 
 ]

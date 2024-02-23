@@ -53,6 +53,37 @@ class Admin(models.Model):
     username = models.CharField(verbose_name="用户名", max_length=32)
     password = models.CharField(verbose_name="密码", max_length=32)
 
+    def __str__(self):
+        return self.username
 
 
+class Task(models.Model):
+    """   任务表   """
+    level_choices = (
+        (1, '紧急'),
+        (2, '重要'),
+        (3, '普通'),
+    )
+
+    level = models.SmallIntegerField(verbose_name="任务等级", choices=level_choices)
+
+    title = models.CharField(verbose_name="标题", max_length=32)
+    detail = models.CharField(verbose_name="详细信息", max_length=32)
+    user = models.ForeignKey(verbose_name="负责人", to="Admin", to_field="id", on_delete=models.CASCADE)
+
+
+class Older(models.Model):
+    """   订单表   """
+    older = models.CharField(verbose_name="订单号", max_length=32)
+    title = models.CharField(verbose_name="商品名称", max_length=32)
+    price = models.DecimalField(verbose_name="价格", max_digits=10, decimal_places=2)
+
+    status_choices = (
+        (0, "待支付"),
+        (1, "已支付"),
+    )
+
+    status = models.SmallIntegerField(verbose_name="状态", choices=status_choices)
+
+    user = models.ForeignKey(verbose_name="用户", to=Admin, to_field="id", on_delete=models.CASCADE)
 
