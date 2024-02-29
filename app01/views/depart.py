@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 
+from openpyxl import load_workbook
 from app01.models import Depart
 from app01.utils.pagination import Pagination
+
 
 def depart_list(request):
     depart_data = Depart.objects.all()
@@ -43,3 +45,24 @@ def depart_edit(request, nid):
     title_new = request.POST.get('title')
     Depart.objects.filter(id=nid).update(title=title_new)
     return redirect('/depart/list/')
+
+
+def depart_multi(request):
+    file_obj = request.FILES.get('file_content')
+
+    if file_obj:
+
+        wb = load_workbook(file_obj)
+        sheet = wb.worksheets[0]
+
+        for row in sheet.iter_rows(min_row=2):
+            text = row[0].value
+            print(text)
+            exists = Depart.objects.filter(title=text).exists()
+            if not exists:
+                Depart.objects.create(title=text)
+
+        return redirect('/depart/list/')
+
+    return redirect('/depart/list/')
+

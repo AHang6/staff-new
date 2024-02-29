@@ -15,17 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.static import serve
+from django.conf import settings
 
-from app01 import views
-from app01.views import depart, user, mobile, admin, login, task, older
+from app01.views import depart, user, mobile, admin, login, task, older, chart, city
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
+
 
     # 部门管理
     path('depart/list/', depart.depart_list),
     path('depart/add/', depart.depart_add),
+    path('depart/multi/', depart.depart_multi),
     path('depart/<int:nid>/delete/', depart.depart_delete),
     path('depart/<int:nid>/edit/', depart.depart_edit),
 
@@ -64,5 +68,14 @@ urlpatterns = [
     path('older/delete/', older.older_delete),
     path('older/edit/', older.older_edit),
     path('older/edit/save/', older.older_edit_save),
+
+    # 数据统计
+    path('chart/list/', chart.chart_list),
+    path('chart/bar/', chart.chart_bar),
+
+    # 城市列表
+    path('city/list/', city.City_list),
+    path('city/add/', city.city_add),
+    path('city/model/add/', city.city_model_add),
 
 ]

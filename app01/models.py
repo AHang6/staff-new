@@ -87,3 +87,11 @@ class Older(models.Model):
 
     user = models.ForeignKey(verbose_name="用户", to=Admin, to_field="id", on_delete=models.CASCADE)
 
+
+class City(models.Model):
+    name = models.CharField(verbose_name='城市名称', max_length=32)
+
+    count = models.IntegerField(verbose_name='人口')
+    img = models.FileField(verbose_name='LOGO', max_length=128, upload_to='city/')
+
+

@@ -1,7 +1,30 @@
 {% extends 'layout.html' %}
 
+{% block css %}
+	<style>
+        .files input {
+            margin-bottom: 10px;
+        }
+	</style>
+{% endblock %}
+
 {% block content %}
 	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right: 5px"></span>
+				批量添加
+			</div>
+			<div class="panel-body files">
+				<form action="/depart/multi/" method="post" novalidate enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="text" placeholder="标题" name="file_name">
+					<input type="file" name="file_content">
+					<input type="submit" value="上传" class="btn btn-primary">
+				</form>
+			</div>
+		</div>
+
 		<a href="/depart/add/" class="btn btn-primary" style="margin-bottom: 20px">添加部门</a>
 
 		<div class="panel panel-default">

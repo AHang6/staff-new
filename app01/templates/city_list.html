@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+	<style>
+		table th,td{
+			text-align: center;
+			height: 30px;
+			line-height: 30px;
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div>
+			<a href="/city/add/" class="btn btn-primary" style="margin-bottom: 20px">添加城市</a>
+			<a href="/city/model/add/" class="btn btn-primary" style="margin-bottom: 20px">添加城市(model)</a>
+
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right: 5px"></span>
+				城市列表
+			</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>LOGO</th>
+						<th>城市名称</th>
+						<th>人数</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in city_data %}
+						<tr>
+							<th scope="row">{{ item.id }}</th>
+							<td><img src="/media/{{ item.img }}" alt="" style="height: 30px"></td>
+							<td>{{ item.name }}</td>
+							<td>{{ item.count }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+
+		<nav aria-label="Page navigation">
+			<ul class="pagination">
+
+				{{ page_string }}
+			</ul>
+		</nav>
+	</div>
+{% endblock %}
